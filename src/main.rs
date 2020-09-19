@@ -1,4 +1,6 @@
 #[macro_use]
+extern crate handlebars;
+#[macro_use]
 extern crate serde_json;
 
 use serde::Serialize;
@@ -13,7 +15,10 @@ struct Item {
 }
 
 fn main() {
-    let reg = Handlebars::new();
+    handlebars_helper!(hex: |v: i64| format!("0x{:x}", v));
+
+    let mut reg = Handlebars::new();
+    reg.register_helper("hex", Box::new(hex));
 
     let template = fs::read_to_string("data/t1.hbs").unwrap();
 
